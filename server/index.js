@@ -32,6 +32,17 @@ app.get('/user/search/:name',async(req,res)=>{
         res.status(500).send(err);
     }
 })
-async function StartServer(){
-    
-};
+async function startServer() {
+    await server.start();
+    server.applyMiddleware({ app });
+    app.listen(port, () => {
+      console.log(Server is running on port ${port});
+    });
+  }
+  function TESTING(){
+    return 0;
+  }
+  TESTING()
+  
+  startServer();
+   
