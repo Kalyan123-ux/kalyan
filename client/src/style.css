@@ -1,0 +1,19 @@
+.Header{
+    font-size: 20px;
+    margin-left:40px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.i1{
+    font-size: 30px;
+    margin-left:50px;
+    margin-top:30px;
+}
+.i31{
+    list-style: none;
+    margin-left:900px;  
+}
+.i31 li{
+    padding:10px;
+    display:inline-block;
+
+}
