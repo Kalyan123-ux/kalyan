@@ -1,6 +1,6 @@
 describe('Home PageTest',()=>{
     it('Check the Input field',()=>{
-        cy.visit('/')
+        cy.visit('/home')
        
        cy.get('input').type('Cinderella')
         
