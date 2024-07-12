@@ -1,66 +1,111 @@
-// src/components/Register.js
-import React, { useState } from 'react';
+// Register.js
+import React, { useState, createContext } from 'react';
+import Login from './Login';
+// import {FormContext} from './FormContext'; // Adjust the import path if necessary
+export const FormContext = createContext("");
 
-const Register = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    age: '',
-    email: '',
-    password: '',
-  });
+function Fields(props) {
+    function HandleSubmit(e) {
+        const { name, value } = e.target;
+        props.setForm(prevForm => ({
+            ...prevForm,
+            [name]: value
+        }));
+    }
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    return (
+        <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={props.fieldName}>
+                {props.fieldName}
+            </label>
+            <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-500"
+                name={props.fieldName}
+                type={props.fieldType}
+                value={props.value}
+                onChange={HandleSubmit}
+                placeholder={`Enter Your ${props.fieldName}`}
+            />
+        </div>
+    );
+}
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission (e.g., send data to backend)
-    console.log(formData); // Replace with actual API call
-  };
+export default function Register() {
+    const [form, setForm] = useState({
+        Name: '',
+        Username: '',
+        Password: '',
+    });
+    const [ localDB, setDB ] = useState([]);
+    function HandleSubmit() {
+        setDB([...localDB, form]);
+        setForm({
+            Name: '',
+            Username: '',
+            Password: ''
+        });
+    }
 
-  return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded shadow-md">
-      <h2 className="text-xl font-semibold mb-6">Register</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          className="input-field"
-        />
-        <input
-          type="text"
-          name="age"
-          placeholder="Age"
-          value={formData.age}
-          onChange={handleChange}
-          className="input-field"
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          className="input-field"
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          className="input-field"
-        />
-        <button type="submit" className="btn-primary mt-4">
-          Register
-        </button>
-      </form>
-    </div>
-  );
-};
-
-export default Register;
+    return (
+        <div>
+            <form className="flex-inline max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 m-10">
+                <h1 className="text-xl text-center font-bold font-mono">Register</h1>
+                <Fields
+                    fieldName="Name"
+                    fieldType="text"
+                    value={form.Name}
+                    setForm={setForm}
+                />
+                
+                <Fields
+                    fieldName="Username"
+                    fieldType="text"
+                    value={form.Username}
+                    setForm={setForm}
+                />
+                <Fields
+                    fieldName="Password"
+                    fieldType="password"
+                    value={form.Password}
+                    setForm={setForm}
+                />
+                <div className="flex items-center justify-between">
+                    <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        type="button"
+                        onClick={HandleSubmit}
+                    >
+                        Submit
+                    </button>
+                </div>
+                <div>
+                    <h2 className="text-xl font-bold">Form Data:</h2>
+                    <table className="table-auto">
+                        <thead className="bg-blue-200 gap-49">
+                            <tr className="p-2 m-5">
+                                <th className="p-2 m-5">Name</th>
+                                
+                                <th className="p-2 m-5">Username</th>
+                                <th className="p-2 m-5">Password</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-grey-300">
+                            {localDB.map((Key, index) => (
+                                <tr key={index}>
+                                    <td className="p-2 m-5">{Key.Name}</td>
+                                    
+                                    <td className="p-2 m-5">{Key.Username}</td>
+                                    <td className="p-2 m-5">{Key.Password}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+            <FormContext.Provider value={[localDB,setDB]}>
+                            <Login/>
+           </FormContext.Provider>
+        </div>
+        
+    );
+}
